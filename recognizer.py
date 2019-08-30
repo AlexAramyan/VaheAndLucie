@@ -1,14 +1,21 @@
 import cv2
 import numpy as np
+import subprocess
 
 from pynput.mouse import Button, Controller
-import wx
+
+def getDisplaySize():
+    cmd = ['xrandr']
+    cmd2 = ['grep', '*']
+    p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+    p2 = subprocess.Popen(cmd2, stdin=p.stdout, stdout=subprocess.PIPE)
+    p.stdout.close()
+
+    return [int(i) for i in str(p2.communicate()[0]).split()[1].split("x")]
 
 mouse = Controller()
 
-app = wx.App()
-
-(sx, sy) = wx.GetDisplaySize()
+(sx, sy) = getDisplaySize()
 (camx, camy) = (320, 250)
 
 upper_blue = np.array([179, 255, 255])
